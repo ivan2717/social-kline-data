@@ -33,8 +33,11 @@ export async function fetchInterestOverTime(
   endTime: Date = new Date(),
   geo: string = ''
 ): Promise<{ date: string; values: number[] }[]> {
+  // Google Trends rate-limits aggressively and serves an HTML "sorry" page
+  // when triggered. Backoffs longer than ~30s start to clear the limit on
+  // shared IPs (e.g. GitHub Actions runners), so retry generously.
+  const maxAttempts = 5;
   let attempts = 0;
-  const maxAttempts = 3;
 
   while (attempts < maxAttempts) {
     try {
@@ -56,8 +59,10 @@ export async function fetchInterestOverTime(
         console.error(`Google Trends failed after ${maxAttempts} attempts:`, err);
         throw err;
       }
-      // 指数退避
-      await new Promise(r => setTimeout(r, 2000 * attempts));
+      // Exponential backoff: 5s, 10s, 20s, 40s.
+      const delay = 5000 * 2 ** (attempts - 1);
+      console.warn(`[Trends] failed, backing off ${delay}ms (attempt ${attempts}/${maxAttempts})`);
+      await new Promise(r => setTimeout(r, delay));
     }
   }
 

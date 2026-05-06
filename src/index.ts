@@ -38,11 +38,14 @@ async function main() {
   console.log(`数据目录: ${DATA_DIR}`);
   console.log('');
 
-  const results = await Promise.all([
-    runIndicator('AI失业焦虑', buildAIAnxietyIndex, 'ai-anxiety.json'),
-    runIndicator('全球冲突', buildGlobalConflictIndex, 'global-conflict.json'),
-    runIndicator('中美关系', buildUSChinaIndex, 'us-china.json'),
-  ]);
+  // Run indicators sequentially. They share the GDELT API and concurrent
+  // calls trip its undocumented rate cap (HTTP 429). The serial gdelt-fetch
+  // queue in lib/gdelt.ts also protects us, but keeping indicator-level
+  // ordering makes the workflow logs easier to follow.
+  const results: (IndicatorData | null)[] = [];
+  results.push(await runIndicator('AI失业焦虑', buildAIAnxietyIndex, 'ai-anxiety.json'));
+  results.push(await runIndicator('全球冲突', buildGlobalConflictIndex, 'global-conflict.json'));
+  results.push(await runIndicator('中美关系', buildUSChinaIndex, 'us-china.json'));
 
   const valid = results.filter((r): r is IndicatorData => r !== null);
 
