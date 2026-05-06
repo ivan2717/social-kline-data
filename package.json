@@ -1,0 +1,23 @@
+{
+  "name": "social-kline-data",
+  "version": "0.1.0",
+  "description": "Data collection scripts for the Social Kline (社会K线) project",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "ai-anxiety": "tsx src/indicators/ai-anxiety.ts",
+    "conflict": "tsx src/indicators/global-conflict.ts",
+    "us-china": "tsx src/indicators/us-china.ts"
+  },
+  "dependencies": {
+    "google-trends-api": "^4.9.2",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
