@@ -1,14 +1,27 @@
 {
-  "updated_at": "2026-05-06T07:28:51.746Z",
+  "updated_at": "2026-05-06T08:50:35.787Z",
   "indicators": [
     {
       "code": "AIFEAR",
       "name": "AI失业焦虑",
-      "current": 0,
+      "current": 70,
       "change_1w": 0,
       "change_1w_pct": 0,
-      "alert": false,
-      "sparkline": []
+      "alert": true,
+      "sparkline": [
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70,
+        70
+      ]
     },
     {
       "code": "GCI",
@@ -29,6 +42,6 @@
       "sparkline": []
     }
   ],
-  "composite_pressure": 0,
-  "alert_count": 0
+  "composite_pressure": 23.33,
+  "alert_count": 1
 }
