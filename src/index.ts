@@ -7,28 +7,59 @@ import { buildGlobalConflictIndex } from './indicators/global-conflict.js';
 import { buildUSChinaIndex } from './indicators/us-china.js';
 import { round } from './lib/normalize.js';
 import type { IndicatorData, SummaryData } from './types.js';
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, '../data');
 
+// Returns true when an indicator's run produced no usable signal.
+// Used to decide whether to overwrite the previous data file: if every
+// upstream source failed we'd rather keep last week's numbers than
+// publish all-null/zero placeholders.
+function isEmpty(data: IndicatorData): boolean {
+  if (data.history.length === 0) return true;
+  const allComponentsNull = (data.components ?? []).every(
+    c => c.value === null || !Number.isFinite(c.value as number)
+  );
+  return allComponentsNull;
+}
+
 async function runIndicator(
   name: string,
   builder: () => Promise<IndicatorData>,
   filename: string
 ): Promise<IndicatorData | null> {
+  const outPath = join(DATA_DIR, filename);
   try {
     const data = await builder();
-    writeFileSync(
-      join(DATA_DIR, filename),
-      JSON.stringify(data, null, 2)
-    );
+    if (isEmpty(data)) {
+      // All sources failed. Preserve the previous file if one exists so
+      // the frontend keeps showing the last good snapshot.
+      if (existsSync(outPath)) {
+        const previous = JSON.parse(readFileSync(outPath, 'utf-8')) as IndicatorData;
+        console.warn(`! ${name}: all sources failed, keeping previous data (${previous.updated_at})`);
+        return previous;
+      }
+      writeFileSync(outPath, JSON.stringify(data, null, 2));
+      console.warn(`! ${name}: all sources failed and no previous data; wrote empty placeholder`);
+      return data;
+    }
+    writeFileSync(outPath, JSON.stringify(data, null, 2));
     console.log(`✓ ${name}: ${data.current} (alert=${data.alert})`);
     return data;
   } catch (err) {
     console.error(`✗ ${name} 失败:`, err);
+    if (existsSync(outPath)) {
+      try {
+        const previous = JSON.parse(readFileSync(outPath, 'utf-8')) as IndicatorData;
+        console.warn(`  → keeping previous data (${previous.updated_at})`);
+        return previous;
+      } catch {
+        // fall through to null
+      }
+    }
     return null;
   }
 }

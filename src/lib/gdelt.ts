@@ -15,7 +15,20 @@
  * retry-with-backoff on 429 / 5xx.
  */
 
+import { Agent, setGlobalDispatcher } from 'undici';
+
 const GDELT_BASE = 'https://api.gdeltproject.org/api/v2/doc/doc';
+
+// Default undici connect timeout is 10s, which is too short when GDELT is
+// under load — handshakes routinely take 20-40s. Bump it process-wide so
+// every fetch (including the google-trends-api lib) benefits.
+setGlobalDispatcher(
+  new Agent({
+    connect: { timeout: 60_000 },
+    headersTimeout: 120_000,
+    bodyTimeout: 120_000,
+  })
+);
 
 // Minimum spacing between successive GDELT requests, in milliseconds.
 // Empirically 1s is too aggressive on GitHub Actions runners; 1.5s holds.
