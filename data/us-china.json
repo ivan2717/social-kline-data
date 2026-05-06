@@ -1,0 +1,31 @@
+{
+  "code": "USCN",
+  "name": "中美关系紧张度",
+  "description": "中美摩擦相关报道的密度与负面情感",
+  "unit": "0-100标准化（值越高代表关系越紧张）",
+  "current": 0,
+  "change_1w": 0,
+  "change_1w_pct": 0,
+  "change_1y_pct": 0,
+  "high_52w": 0,
+  "low_52w": 0,
+  "avg_52w": 0,
+  "alert": false,
+  "history": [],
+  "components": [
+    {
+      "name": "摩擦报道量",
+      "weight": 0.5,
+      "value": null,
+      "source": "GDELT"
+    },
+    {
+      "name": "报道负面情感",
+      "weight": 0.5,
+      "value": null,
+      "source": "GDELT Tone"
+    }
+  ],
+  "updated_at": "2026-05-06T07:28:45.351Z",
+  "methodology": "摩擦报道量50% + 报道负面情感50%。GDELT 查询限定中美同时出现且包含贸易/台海/军事等议题。基准期为前60%数据。"
+}

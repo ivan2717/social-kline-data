@@ -1,0 +1,34 @@
+{
+  "updated_at": "2026-05-06T07:28:51.746Z",
+  "indicators": [
+    {
+      "code": "AIFEAR",
+      "name": "AI失业焦虑",
+      "current": 0,
+      "change_1w": 0,
+      "change_1w_pct": 0,
+      "alert": false,
+      "sparkline": []
+    },
+    {
+      "code": "GCI",
+      "name": "全球冲突指数",
+      "current": 0,
+      "change_1w": 0,
+      "change_1w_pct": 0,
+      "alert": false,
+      "sparkline": []
+    },
+    {
+      "code": "USCN",
+      "name": "中美关系紧张度",
+      "current": 0,
+      "change_1w": 0,
+      "change_1w_pct": 0,
+      "alert": false,
+      "sparkline": []
+    }
+  ],
+  "composite_pressure": 0,
+  "alert_count": 0
+}

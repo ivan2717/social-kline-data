@@ -1,0 +1,37 @@
+{
+  "code": "AIFEAR",
+  "name": "AI失业焦虑",
+  "description": "公众对AI取代就业的焦虑程度",
+  "unit": "0-100标准化",
+  "current": 0,
+  "change_1w": 0,
+  "change_1w_pct": 0,
+  "change_1y_pct": 0,
+  "high_52w": 0,
+  "low_52w": 0,
+  "avg_52w": 0,
+  "alert": false,
+  "history": [],
+  "components": [
+    {
+      "name": "搜索热度",
+      "weight": 0.4,
+      "value": null,
+      "source": "Google Trends"
+    },
+    {
+      "name": "媒体讨论量",
+      "weight": 0.35,
+      "value": null,
+      "source": "GDELT"
+    },
+    {
+      "name": "媒体负面情感",
+      "weight": 0.25,
+      "value": null,
+      "source": "GDELT Tone"
+    }
+  ],
+  "updated_at": "2026-05-06T07:28:51.745Z",
+  "methodology": "搜索热度40% + 媒体讨论量35% + 媒体负面情感25%。基准期为前60%数据，z-score标准化后映射到0-100。"
+}

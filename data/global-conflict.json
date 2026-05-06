@@ -1,0 +1,31 @@
+{
+  "code": "GCI",
+  "name": "全球冲突指数",
+  "description": "全球武装冲突的报道密度与烈度",
+  "unit": "0-100标准化",
+  "current": 0,
+  "change_1w": 0,
+  "change_1w_pct": 0,
+  "change_1y_pct": 0,
+  "high_52w": 0,
+  "low_52w": 0,
+  "avg_52w": 0,
+  "alert": false,
+  "history": [],
+  "components": [
+    {
+      "name": "冲突报道量",
+      "weight": 0.6,
+      "value": null,
+      "source": "GDELT"
+    },
+    {
+      "name": "报道负面情感",
+      "weight": 0.4,
+      "value": null,
+      "source": "GDELT Tone"
+    }
+  ],
+  "updated_at": "2026-05-06T07:28:45.389Z",
+  "methodology": "冲突报道量60% + 报道负面情感40%。基准期为前60%数据，z-score标准化后映射到0-100。"
+}
